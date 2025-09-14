@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patato e patata</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Georgia', serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .book-container {
+            perspective: 1500px;
+            position: relative;
+        }
+
+        .book {
+            width: 600px;
+            height: 400px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s ease-in-out;
+        }
+
+        .book.opened {
+            transform: rotateY(-20deg);
+        }
+
+        /* --- STILE COPERTINA AGGIORNATO --- */
+        .cover {
+            width: 300px;
+            height: 400px;
+            position: absolute;
+            left: 0;
+            background: linear-gradient(45deg, #5e35b1, #9575cd);
+            border: 3px solid #4527a0;
+            border-radius: 8px 0 0 8px;
+            transform-origin: right center;
+            transition: transform 0.8s ease-in-out;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #ecf0f1;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            /* Aggiunta immagine di sfondo stilizzata della rosa origami */
+            background-image: url('https://via.placeholder.com/150/ff6347/ffffff?text=Origami+Rose'); /* Sostituisci con l'URL della tua immagine stilizzata */
+            background-repeat: no-repeat;
+            background-position: center bottom 20px; /* Posiziona in basso al centro */
+            background-size: 100px; /* Dimensione dell'immagine stilizzata */
+        }
+
+        .cover.opened {
+            transform: rotateY(-160deg);
+        }
+
+        /* --- STILE TITOLO AGGIORNATO --- */
+        .cover h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #ffd700, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cover p {
+            font-size: 1.2rem;
+            font-style: italic;
+            opacity: 0.8;
+            margin-bottom: 80px; /* Sposta il testo sopra la rosa */
+        }
+
+        .pages-container {
+            width: 600px;
+            height: 400px;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        .page {
+            width: 300px;
+            height: 400px;
+            position: absolute;
+            background: #fefefe;
+            border: 2px solid #ddd;
+            border-radius: 0 8px 8px 0;
+            padding: 40px 30px;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .page.active {
+            display: flex;
+            right: 0;
+        }
+
+        /* --- RIGA VIOLA AGGIORNATA --- */
+        .page h2 {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #7e57c2;
+            padding-bottom: 10px;
+        }
+
+        .page p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #34495e;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .page-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+            gap: 20px;
+            z-index: 100;
+        }
+
+        .controls.visible {
+            display: flex;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            font-size: 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(231, 76, 60, 0.4);
+        }
+
+        .btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .page-counter {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(44, 62, 80, 0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1rem;
+            display: none;
+        }
+
+        .page-counter.visible {
+            display: block;
+        }
+
+        .page-transition {
+            animation: pageFlip 0.6s ease-in-out;
+        }
+
+        @keyframes pageFlip {
+            0% { transform: rotateY(0deg); opacity: 1; }
+            50% { transform: rotateY(90deg); opacity: 0; }
+            100% { transform: rotateY(0deg); opacity: 1; }
+        }
+
+        .cover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.3)"><animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite"/></circle><circle cx="80" cy="30" r="1" fill="rgba(255,255,255,0.4)"><animate attributeName="opacity" values="0;1;0" dur="3s" repeatCount="indefinite" begin="1s"/></circle><circle cx="30" cy="80" r="1.5" fill="rgba(255,255,255,0.3)"><animate attributeName="opacity" values="0;1;0" dur="2.5s" repeatCount="indefinite" begin="0.5s"/></circle></svg>');
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="book-container">
+        <div class="book" id="book">
+            <div class="cover" id="cover">
+                <h1>✨ Patato e patata ✨</h1>
+                <p>Clicca per aprire l'avventura</p>
+            </div>
+            
+            <div class="pages-container">
+                <div class="page active" id="page-1">
+                    <h2>Ricordi da non dimenticare</h2>
+                </div>
+
+                <div class="page" id="page-2">
+                    <div class="page-image"><img src="assets/image0.jpg" alt="Patata"></div>
+                    <p>Patata</p>
+                </div>
+
+                <div class="page" id="page-3">
+                    <div class="page-image"><img src="assets/image01.jpg" alt="Patato"></div>
+                    <p>Patato</p>
+                </div>
+
+                <div class="page" id="page-4">
+                    <h2>NOI</h2>
+                </div>
+
+                <div class="page" id="page-5">
+                    <div class="page-image"><img src="assets/image1.jpg" alt="Noi"></div>
+                </div>
+
+                <div class="page" id="page-6">
+                    <div class="page-image"><img src="assets/image2.jpg" alt="Patato"></div>
+                </div>
+
+                <div class="page" id="page-7">
+                    <div class="page-image"><img src="assets/image3.jpg" alt="Pagina 5"></div>
+                </div>
+
+                <div class="page" id="page-8">
+                    <div class="page-image"><img src="assets/image4.jpg" alt="Pagina 6"></div>
+                </div>
+
+                <div class="page" id="page-9">
+                    <div class="page-image"><img src="assets/image5.jpg" alt="Pagina 7"></div>
+                </div>
+
+                <div class="page" id="page-10">
+                    <div class="page-image"><img src="assets/image6.jpg" alt="Pagina 8"></div>
+                </div>
+
+                <div class="page" id="page-11">
+                    <div class="page-image"><img src="assets/image7.jpg" alt="Pagina 9"></div>
+                </div>
+
+                <div class="page" id="page-12">
+                    <div class="page-image"><img src="assets/image8.jpg" alt="Pagina 10"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls" id="controls">
+        <button class="btn" id="prevBtn" onclick="previousPage()">◀ Precedente</button>
+        <button class="btn" id="nextBtn" onclick="nextPage()">Successiva ▶</button>
+    </div>
+
+    <div class="page-counter" id="pageCounter">
+        Pagina <span id="currentPage">1</span> di <span id="totalPages">12</span>
+    </div>
+
+    <script>
+        let currentPageNum = 1;
+        const totalPages = 12;
+        let bookOpened = false;
+
+        document.getElementById('cover').addEventListener('click', function() {
+            if (!bookOpened) {
+                document.getElementById('book').classList.add('opened');
+                document.getElementById('cover').classList.add('opened');
+                document.getElementById('controls').classList.add('visible');
+                document.getElementById('pageCounter').classList.add('visible');
+                bookOpened = true;
+                
+                this.style.transform += ' scale(1.02)';
+                setTimeout(() => {
+                    this.style.transform = this.style.transform.replace(' scale(1.02)', '');
+                }, 200);
+            }
+        });
+
+        function updatePageDisplay() {
+            for (let i = 1; i <= totalPages; i++) {
+                document.getElementById(`page-${i}`).classList.remove('active');
+            }
+            
+            const currentPage = document.getElementById(`page-${currentPageNum}`);
+            currentPage.classList.add('page-transition');
+            currentPage.classList.add('active');
+            
+            setTimeout(() => {
+                currentPage.classList.remove('page-transition');
+            }, 600);
+
+            document.getElementById('currentPage').textContent = currentPageNum;
+            
+            document.getElementById('prevBtn').disabled = currentPageNum === 1;
+            document.getElementById('nextBtn').disabled = currentPageNum === totalPages;
+        }
+
+        function nextPage() {
+            if (currentPageNum < totalPages) {
+                currentPageNum++;
+                updatePageDisplay();
+                
+                const btn = document.getElementById('nextBtn');
+                btn.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    btn.style.transform = '';
+                }, 100);
+            }
+        }
+
+        function previousPage() {
+            if (currentPageNum > 1) {
+                currentPageNum--;
+                updatePageDisplay();
+                
+                const btn = document.getElementById('prevBtn');
+                btn.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    btn.style.transform = '';
+                }, 100);
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (!bookOpened) return;
+            
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                previousPage();
+            } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                nextPage();
+            }
+        });
+
+        updatePageDisplay();
+
+        function createParticles() {
+            const particles = [];
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'fixed';
+                particle.style.width = '4px';
+                particle.style.height = '4px';
+                particle.style.background = 'rgba(255,255,255,0.3)';
+                particle.style.borderRadius = '50%';
+                particle.style.pointerEvents = 'none';
+                particle.style.zIndex = '-1';
+                document.body.appendChild(particle);
+                
+                particles.push({
+                    element: particle,
+                    x: Math.random() * window.innerWidth,
+                    y: Math.random() * window.innerHeight,
+                    vx: (Math.random() - 0.5) * 2,
+                    vy: (Math.random() - 0.5) * 2
+                });
+            }
+            
+            function animateParticles() {
+                particles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    
+                    if (p.x < 0 || p.x > window.innerWidth) p.vx *= -1;
+                    if (p.y < 0 || p.y > window.innerHeight) p.vy *= -1;
+                    
+                    p.element.style.left = p.x + 'px';
+                    p.element.style.top = p.y + 'px';
+                });
+                
+                requestAnimationFrame(animateParticles);
+            }
+            
+            animateParticles();
+        }
+
+        setTimeout(createParticles, 1000);
+    </script>
+</body>
+</html>
