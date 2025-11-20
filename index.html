@@ -38,7 +38,6 @@
             transform: rotateY(-20deg);
         }
 
-        /* --- STILE COPERTINA AGGIORNATO --- */
         .cover {
             width: 300px;
             height: 400px;
@@ -58,18 +57,16 @@
             text-align: center;
             cursor: pointer;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            /* Aggiunta immagine di sfondo stilizzata della rosa origami */
-            background-image: url('https://via.placeholder.com/150/ff6347/ffffff?text=Origami+Rose'); /* Sostituisci con l'URL della tua immagine stilizzata */
+            background-image: url('https://via.placeholder.com/150/ff6347/ffffff?text=Origami+Rose');
             background-repeat: no-repeat;
-            background-position: center bottom 20px; /* Posiziona in basso al centro */
-            background-size: 100px; /* Dimensione dell'immagine stilizzata */
+            background-position: center bottom 20px;
+            background-size: 100px;
         }
 
         .cover.opened {
             transform: rotateY(-160deg);
         }
 
-        /* --- STILE TITOLO AGGIORNATO --- */
         .cover h1 {
             font-size: 2.5rem;
             margin-bottom: 20px;
@@ -84,7 +81,7 @@
             font-size: 1.2rem;
             font-style: italic;
             opacity: 0.8;
-            margin-bottom: 80px; /* Sposta il testo sopra la rosa */
+            margin-bottom: 80px;
         }
 
         .pages-container {
@@ -116,7 +113,6 @@
             right: 0;
         }
 
-        /* --- RIGA VIOLA AGGIORNATA --- */
         .page h2 {
             color: #2c3e50;
             font-size: 2rem;
@@ -213,6 +209,254 @@
             background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.3)"><animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite"/></circle><circle cx="80" cy="30" r="1" fill="rgba(255,255,255,0.4)"><animate attributeName="opacity" values="0;1;0" dur="3s" repeatCount="indefinite" begin="1s"/></circle><circle cx="30" cy="80" r="1.5" fill="rgba(255,255,255,0.3)"><animate attributeName="opacity" values="0;1;0" dur="2.5s" repeatCount="indefinite" begin="0.5s"/></circle></svg>');
             pointer-events: none;
         }
+
+        /* Easter Egg Icon */
+        .secret-icon {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(231, 76, 60, 0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .secret-icon:hover {
+            transform: scale(1.1);
+            background: rgba(231, 76, 60, 0.5);
+        }
+
+        /* Hacker Overlay */
+        .hacker-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #1a0a1f 0%, #0a0010 50%, #000000 100%);
+            display: none;
+            z-index: 9999;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 1.2s ease-in-out;
+        }
+
+        .hacker-overlay.active {
+            display: block;
+            animation: fadeInOverlay 1.2s ease-in-out forwards;
+        }
+
+        @keyframes fadeInOverlay {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .hacker-overlay::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(139, 0, 139, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(75, 0, 130, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(220, 20, 60, 0.1) 0%, transparent 50%);
+            animation: pulseGradient 8s ease-in-out infinite;
+        }
+
+        @keyframes pulseGradient {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .wheel-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            opacity: 0;
+            animation: fadeInWheel 1.5s ease-in-out 1s forwards;
+        }
+
+        @keyframes fadeInWheel {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .wheel {
+            width: 450px;
+            height: 450px;
+            border-radius: 50%;
+            border: 12px solid transparent;
+            background: linear-gradient(#1a0a1f, #1a0a1f) padding-box,
+                        linear-gradient(45deg, #8b008b, #4b0082, #dc143c, #8b008b) border-box;
+            position: relative;
+            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+            box-shadow: 
+                0 0 40px rgba(139, 0, 139, 0.6),
+                0 0 80px rgba(220, 20, 60, 0.4),
+                inset 0 0 60px rgba(139, 0, 139, 0.3);
+            margin: 0 auto;
+        }
+
+        .wheel-segment {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            top: 50%;
+            left: 50%;
+            transform-origin: 0% 0%;
+            clip-path: polygon(0 0, 100% 0, 0 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0,0,0,0.8);
+        }
+
+        .wheel-segment:nth-child(1) { transform: rotate(0deg); background: linear-gradient(135deg, #8b008b, #6a0066); }
+        .wheel-segment:nth-child(2) { transform: rotate(45deg); background: linear-gradient(135deg, #4b0082, #36005f); }
+        .wheel-segment:nth-child(3) { transform: rotate(90deg); background: linear-gradient(135deg, #dc143c, #a01030); }
+        .wheel-segment:nth-child(4) { transform: rotate(135deg); background: linear-gradient(135deg, #8b008b, #6a0066); }
+        .wheel-segment:nth-child(5) { transform: rotate(180deg); background: linear-gradient(135deg, #4b0082, #36005f); }
+        .wheel-segment:nth-child(6) { transform: rotate(225deg); background: linear-gradient(135deg, #dc143c, #a01030); }
+        .wheel-segment:nth-child(7) { transform: rotate(270deg); background: linear-gradient(135deg, #8b008b, #6a0066); }
+        .wheel-segment:nth-child(8) { transform: rotate(315deg); background: linear-gradient(135deg, #4b0082, #36005f); }
+
+        .wheel-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, #dc143c, #8b008b);
+            border-radius: 50%;
+            border: 4px solid #1a0a1f;
+            z-index: 10;
+            box-shadow: 
+                0 0 30px rgba(220, 20, 60, 0.8),
+                inset 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .wheel-pointer {
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 25px solid transparent;
+            border-right: 25px solid transparent;
+            border-top: 50px solid #dc143c;
+            filter: drop-shadow(0 0 15px rgba(220, 20, 60, 0.8));
+        }
+
+        .spin-btn {
+            margin-top: 60px;
+            background: linear-gradient(135deg, #dc143c, #8b008b);
+            color: #fff;
+            border: 3px solid #4b0082;
+            padding: 20px 50px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 0 25px rgba(220, 20, 60, 0.5),
+                0 5px 15px rgba(0,0,0,0.3);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .spin-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 
+                0 0 40px rgba(220, 20, 60, 0.8),
+                0 8px 20px rgba(0,0,0,0.4);
+            background: linear-gradient(135deg, #ff1744, #a00066);
+        }
+
+        .spin-btn:disabled {
+            background: linear-gradient(135deg, #333, #1a1a1a);
+            color: #666;
+            cursor: not-allowed;
+            box-shadow: none;
+            border-color: #333;
+        }
+
+        .result-display {
+            margin-top: 40px;
+            font-size: 1.6rem;
+            color: #dc143c;
+            font-family: 'Georgia', serif;
+            text-shadow: 
+                0 0 20px rgba(220, 20, 60, 0.8),
+                0 0 40px rgba(139, 0, 139, 0.6);
+            min-height: 50px;
+            animation: resultGlow 2s ease-in-out infinite;
+            font-weight: bold;
+            max-width: 600px;
+            line-height: 1.4;
+        }
+
+        @keyframes resultGlow {
+            0%, 100% { opacity: 1; text-shadow: 0 0 20px rgba(220, 20, 60, 0.8), 0 0 40px rgba(139, 0, 139, 0.6); }
+            50% { opacity: 0.85; text-shadow: 0 0 30px rgba(220, 20, 60, 1), 0 0 60px rgba(139, 0, 139, 0.8); }
+        }
+
+        .close-hacker {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: rgba(220, 20, 60, 0.9);
+            color: #fff;
+            border: 2px solid #8b008b;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Georgia', serif;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(220, 20, 60, 0.5);
+        }
+
+        .close-hacker:hover {
+            background: #ff1744;
+            box-shadow: 0 0 30px rgba(220, 20, 60, 0.8);
+            transform: scale(1.05);
+        }
+
+        /* Floating particles for ambience */
+        .ambient-particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: radial-gradient(circle, rgba(220, 20, 60, 0.8), transparent);
+            border-radius: 50%;
+            animation: floatParticle 15s infinite;
+            opacity: 0;
+        }
+
+        @keyframes floatParticle {
+            0% { transform: translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(1.5); opacity: 0; }
+        }
     </style>
 </head>
 <body>
@@ -284,6 +528,31 @@
 
     <div class="page-counter" id="pageCounter">
         Pagina <span id="currentPage">1</span> di <span id="totalPages">12</span>
+    </div>
+
+    <!-- Easter Egg Icon -->
+    <div class="secret-icon" id="secretIcon">🔥</div>
+
+    <!-- Hacker Overlay -->
+    <div class="hacker-overlay" id="hackerOverlay">
+        <button class="close-hacker" id="closeHacker">✕ CHIUDI</button>
+        
+        <div class="wheel-container">
+            <div class="wheel-pointer"></div>
+            <div class="wheel" id="wheel">
+                <div class="wheel-segment"></div>
+                <div class="wheel-segment"></div>
+                <div class="wheel-segment"></div>
+                <div class="wheel-segment"></div>
+                <div class="wheel-segment"></div>
+                <div class="wheel-segment"></div>
+                <div class="wheel-segment"></div>
+                <div class="wheel-segment"></div>
+                <div class="wheel-center"></div>
+            </div>
+            <button class="spin-btn" id="spinBtn">GIRA LA RUOTA</button>
+            <div class="result-display" id="resultDisplay"></div>
+        </div>
     </div>
 
     <script>
@@ -404,6 +673,158 @@
         }
 
         setTimeout(createParticles, 1000);
+
+        // Easter Egg Logic
+        let clickCount = 0;
+        const secretIcon = document.getElementById('secretIcon');
+        const hackerOverlay = document.getElementById('hackerOverlay');
+        const spinBtn = document.getElementById('spinBtn');
+        const wheel = document.getElementById('wheel');
+        const resultDisplay = document.getElementById('resultDisplay');
+        const closeHacker = document.getElementById('closeHacker');
+
+        const sexyTasks = [
+            "💋 Bacio appassionato per 30 secondi",
+            "🔥 Massaggio sensuale",
+            "💃 Spogliarello sexy",
+            "😈 5 minuti di coccole hot",
+            "👄 Susurra qualcosa di sexy all'orecchio",
+            "🌹 Bacio sul collo",
+            "💕 Scegli tu cosa fare",
+            "🎭 Gioco di ruolo per 10 minuti",
+            "🧊 Tocco Ghiacciato: Accarezzare con un cubetto di ghiaccio",
+            "👅 Assaggia & Bacia: Benda e dai da assaggiare, poi bacia",
+            "👀 Sguardo 1 min: Contatto visivo intenso e silenzioso per un minuto",
+            "🌬️ Soffio Brividi: Soffiare delicatamente su una zona sensibile",
+            "✍️ Scrivi sul Corpo: Scrivere una parola sexy sulla pelle (l'altro indovina)",
+            "💋 Bacio 5 Punti: Baciare 5 punti del corpo (scelti dal partner)",
+            "🤲 Massaggio ai piedi",
+            "Comunicare senza parlare per 2 minuti",
+            "🚫 Mani Nascoste: Bacio/azione con le mani bloccate o dietro la schiena",
+            "🔥 Sfida Sguardo: Chi distoglie toglie un indumento",
+            "🪞 Mimo Sexy: Eseguire a turno la stessa azione sexy/posa",
+            "💬 Domanda Hard: Porre una domanda intima, l'altro risponde onestamente",
+            "💡 Buio 5 min: Azione al buio completo per 2 minuti",
+            "🍸 Drink Hot: Condividere una bevanda in modo sexy",
+            "👗 Togli a Sorteggio: Togliere un indumento a sorte",
+            "🛋️ Trasloco Hot: Eseguire l'azione su un mobile insolito (es. sedia)",
+            "🩹 Bendaggio: Bendare il partner (occhi o mani) per 2 minuti",
+            "🧣 Laccio Gioco: Usare un oggetto (foulard/sciarpa) come accessorio di gioco",
+            "🧦 Togli Indumento: Togliere l'indumento scelto da chi ha girato la ruota",
+            "👑 Desiderio: Esprimere un piccolo desiderio hot che l'altro deve eseguire",
+            "🃏 Carta Bianca: Chi gira la ruota sceglie l'azione che vuole subire",
+            "🔄 Rigioca + Combo: Rigira la ruota e combina i prossimi due risultati",
+            "⏸️ Statua Sexy: Congelare la posizione del partner per 30 secondi",
+            "🤝 Scambio: Se l'azione era per uno, la successiva è per l'altro",
+            "❌ Salta & Accumula: Salta questo turno, accumula energia per il prossimo",
+            "🔥 Countdown: 10 baci veloci",
+            "🥂 Bevi dal corpo dell'altro",
+            "🫴 Toccarsi l'un l'altro con una mano",
+            "👂 Sussurro Segreto: Sussurrare un desiderio segreto all'orecchio dell'altro — poi bisogna eseguirlo entro 24 ore",
+            "🍓 Frutto Proibito: Mangiare un frutto con le mani e darlo all'altro con la bocca — senza usare le mani",
+            "🧂 Sale e Bacio: Spargere un po' di sale sul collo, poi leccarlo via con la lingua — seguito da un bacio profondo",
+            "🤫 Silenzio Sensuale: Non parlare per 1 minuto, ma comunicare solo con tocchi, sguardi e respiri",
+            "🖋️ Disegno con le Labbra: Usare le labbra per disegnare un simbolo sul corpo dell'altro — poi indovinare cosa rappresenta",
+            "🕳️ Buio e Tocco: Al buio, a turno si deve indovinare con le mani (senza guardare) dove stai per baciare, se si indovina, si sceglie la prossima azione",
+            "🍵 Bevanda Calda a Bocca a Bocca: Prendere un sorso di qualcosa e darglielo con la bocca — senza usare le mani",
+            "🕶️ Occhi chiusi al buio: Chiudere gli occhi e baciare l'altro mentre sono al buio — non si vede nulla, solo il tatto e il calore",
+            "📜 Biglietto Nascosto: Scrivere un desiderio su un bigliettino, piegarlo e nasconderlo sotto un indumento, l'altro deve trovarlo con la bocca"
+
+
+        ];
+
+        secretIcon.addEventListener('click', function() {
+            clickCount++;
+            this.style.transform = `scale(${1 + clickCount * 0.1}) rotate(${clickCount * 72}deg)`;
+            
+            if (clickCount >= 5) {
+                hackerOverlay.classList.add('active');
+                initMatrix();
+                clickCount = 0;
+                this.style.transform = 'scale(1) rotate(0deg)';
+            }
+            
+            setTimeout(() => {
+                if (clickCount < 5) {
+                    this.style.transform = 'scale(1) rotate(0deg)';
+                }
+            }, 300);
+        });
+
+        closeHacker.addEventListener('click', function() {
+            hackerOverlay.classList.remove('active');
+        });
+
+        // Matrix Effect
+        function initMatrix() {
+            const canvas = document.getElementById('matrixCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            const chars = '01アイウエオカキクセxyz🔥💋😈';
+            const fontSize = 14;
+            const columns = canvas.width / fontSize;
+            const drops = [];
+            
+            for (let i = 0; i < columns; i++) {
+                drops[i] = Math.random() * canvas.height / fontSize;
+            }
+            
+            function draw() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.fillStyle = '#00ff41';
+                ctx.font = fontSize + 'px monospace';
+                
+                for (let i = 0; i < drops.length; i++) {
+                    const text = chars[Math.floor(Math.random() * chars.length)];
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                    
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }
+            
+            setInterval(draw, 33);
+        }
+
+        // Wheel Spin Logic
+        let isSpinning = false;
+
+        spinBtn.addEventListener('click', function() {
+            if (isSpinning) return;
+            
+            isSpinning = true;
+            spinBtn.disabled = true;
+            resultDisplay.textContent = '';
+            
+            const randomTask = sexyTasks[Math.floor(Math.random() * sexyTasks.length)];
+            const spins = 5 + Math.floor(Math.random() * 5);
+            const extraDegrees = Math.floor(Math.random() * 360);
+            const totalRotation = (spins * 360) + extraDegrees;
+            
+            wheel.style.transform = `rotate(${totalRotation}deg)`;
+            
+            setTimeout(() => {
+                resultDisplay.textContent = randomTask;
+                isSpinning = false;
+                spinBtn.disabled = false;
+                
+                // Reset wheel rotation for next spin
+                setTimeout(() => {
+                    wheel.style.transition = 'none';
+                    wheel.style.transform = 'rotate(0deg)';
+                    setTimeout(() => {
+                        wheel.style.transition = 'transform 3s cubic-bezier(0.17, 0.67, 0.12, 0.99)';
+                    }, 50);
+                }, 2000);
+            }, 3000);
+        });
     </script>
 </body>
 </html>
