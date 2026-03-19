@@ -1,0 +1,246 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.container {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+}
+
+.heart-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.heart {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: rgba(255, 182, 193, 0.3);
+    transform: rotate(45deg);
+    animation: floatHeart 6s infinite;
+}
+
+.heart::before,
+.heart::after {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: rgba(255, 182, 193, 0.3);
+    border-radius: 50%;
+}
+
+.heart::before {
+    top: -15px;
+    left: 0;
+}
+
+.heart::after {
+    top: 0;
+    left: -15px;
+}
+
+.heart:nth-child(1) { left: 10%; animation-delay: 0s; }
+.heart:nth-child(2) { left: 30%; animation-delay: 1s; }
+.heart:nth-child(3) { left: 50%; animation-delay: 2s; }
+.heart:nth-child(4) { left: 70%; animation-delay: 3s; }
+.heart:nth-child(5) { left: 90%; animation-delay: 4s; }
+
+@keyframes floatHeart {
+    0% {
+        top: 100%;
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        top: -10%;
+        opacity: 0;
+    }
+}
+
+.content {
+    background: white;
+    border-radius: 30px;
+    padding: 60px 40px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    animation: fadeIn 0.6s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hidden {
+    display: none !important;
+}
+
+.title {
+    font-size: 80px;
+    margin-bottom: 20px;
+    animation: heartbeat 1.5s infinite;
+}
+
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    10%, 30% { transform: scale(1.1); }
+    20%, 40% { transform: scale(1); }
+}
+
+.question {
+    font-size: 32px;
+    color: #333;
+    margin-bottom: 40px;
+    font-weight: 600;
+}
+
+.buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 18px 40px;
+    font-size: 20px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-yes {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    animation: pulse 2s infinite;
+}
+
+.btn-yes:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.btn-no {
+    background: #e0e0e0;
+    color: #666;
+    position: relative;
+    transition: all 0.1s ease;
+}
+
+.btn-no:hover {
+    background: #d0d0d0;
+}
+
+/* Schermata di successo */
+.celebration {
+    font-size: 100px;
+    margin-bottom: 30px;
+    animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+.success-message {
+    font-size: 36px;
+    color: #f5576c;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.love-message {
+    font-size: 24px;
+    color: #666;
+    font-style: italic;
+}
+
+.confetti {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .content {
+        padding: 40px 30px;
+    }
+    
+    .title {
+        font-size: 60px;
+    }
+    
+    .question {
+        font-size: 24px;
+    }
+    
+    .btn {
+        padding: 15px 30px;
+        font-size: 18px;
+    }
+    
+    .celebration {
+        font-size: 70px;
+    }
+    
+    .success-message {
+        font-size: 28px;
+    }
+    
+    .love-message {
+        font-size: 20px;
+    }
+}

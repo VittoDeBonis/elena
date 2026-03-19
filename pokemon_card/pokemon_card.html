@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carta Pokemon Romantica</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #311b92 0%, #4a148c 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .pokemon-card {
+            width: 400px;
+            height: 560px;
+            background: linear-gradient(135deg, #5e35b1 0%, #7b1fa2 100%);
+            border-radius: 20px;
+            padding: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .pokemon-card:hover {
+            transform: translateY(-10px) rotateZ(2deg);
+        }
+
+        .pokemon-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .card-inner {
+            background: white;
+            border-radius: 15px;
+            height: 100%;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .pokemon-name {
+            font-size: 28px;
+            font-weight: bold;
+            color: #5e35b1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .hp {
+            font-size: 24px;
+            font-weight: bold;
+            color: #6a1b9a;
+        }
+
+        .type-badge {
+            background: linear-gradient(135deg, #673ab7 0%, #512da8 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .image-container {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #d1c4e9 0%, #b39ddb 100%);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            position: relative;
+            border: 3px solid #673ab7;
+        }
+
+        .pokemon-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .stats {
+            margin-bottom: 15px;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .stat-label {
+            font-weight: bold;
+            color: #666;
+        }
+
+        .stat-value {
+            color: #5e35b1;
+            font-weight: bold;
+        }
+
+        .abilities {
+            margin-bottom: 15px;
+        }
+
+        .ability {
+            background: linear-gradient(135deg, #ede7f6 0%, #d1c4e9 100%);
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid #673ab7;
+        }
+
+        .ability-name {
+            font-weight: bold;
+            color: #5e35b1;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ability-damage {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .ability-description {
+            font-size: 12px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .card-footer {
+            font-size: 11px;
+            color: #999;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .heart-icon {
+            color: #d32f2f;
+            font-size: 18px;
+        }
+
+        .rarity {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 24px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .energy-symbols {
+            display: flex;
+            gap: 5px;
+        }
+
+        .energy {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #673ab7 0%, #512da8 100%);
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="pokemon-card">
+        <div class="card-inner">
+            <div class="card-header">
+                <div class="pokemon-name">Oltre l'orizzonte</div>
+                <div class="hp">❤️ 100</div>
+            </div>
+
+            <div class="type-badge">⚡ Tipo: Passione</div>
+
+            <div class="image-container">
+                <img src="noi.jpg" 
+                     alt="Foto Pokemon" 
+                     class="pokemon-image"
+                     id="pokemonPhoto">
+            </div>
+
+            <div class="stats">
+                <div class="stat-row">
+                    <span class="stat-label">🔥 Chimica:</span>
+                    <span class="stat-value">★★★★★</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">💋 Seduzione:</span>
+                    <span class="stat-value">★★★★★</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">💪 Resistenza:</span>
+                    <span class="stat-value">★★★★☆</span>
+                </div>
+            </div>
+
+            <div class="abilities">
+                <div class="ability">
+                    <div class="ability-name">
+                        <span><span class="heart-icon">🔥</span> Notte di Fuoco</span>
+                        <span class="ability-damage">100</span>
+                    </div>
+                    <div class="ability-description">
+                        Super efficace! Fa perdere il controllo all'avversario. Richiede 3 energie passione.
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                ⭐ Edizione Speciale Limitata ⭐ 
+            </div>
+            <div class="rarity">✨</div>
+        </div>
+    </div>
+
+    <script>
+        // Effetto 3D al movimento del mouse
+        const card = document.querySelector('.pokemon-card');
+        
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = (y - centerY) / 10;
+            const rotateY = (centerX - x) / 10;
+            
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+        });
+
+        // Funzione per cambiare l'immagine
+        function cambiaImmagine(nuovoPercorso) {
+            document.getElementById('pokemonPhoto').src = nuovoPercorso;
+        }
+    </script>
+</body>
+</html>
